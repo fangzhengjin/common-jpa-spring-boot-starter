@@ -1,4 +1,4 @@
-# common-core
+# common-jpa-spring-boot-starter
 
 ```groovy
 repositories {
@@ -6,6 +6,6 @@ repositories {
 }
 
 dependencies {
-    implementation "com.github.fangzhengjin:common-core:0.0.1"
+    implementation "com.github.fangzhengjin:common-jpa-spring-boot-starter:0.0.1"
 }
 ```
