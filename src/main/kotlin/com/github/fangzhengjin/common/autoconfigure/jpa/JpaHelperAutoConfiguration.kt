@@ -1,10 +1,16 @@
 package com.github.fangzhengjin.common.autoconfigure.jpa
 
 import com.github.fangzhengjin.common.component.jpa.JpaHelper
+import com.github.fangzhengjin.common.component.jpa.auditing.DefaultAuditorAware
+import com.github.fangzhengjin.common.component.jpa.auditing.SpringSecurityAuditorAware
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.domain.AuditorAware
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
+import org.springframework.security.core.context.SecurityContextHolder
 import javax.persistence.EntityManager
 
 /**
@@ -16,11 +22,28 @@ import javax.persistence.EntityManager
  * @date 2019/1/28 16:59
  */
 @Configuration
+@EnableJpaAuditing
 @ConditionalOnClass(EntityManager::class)
 class JpaHelperAutoConfiguration {
+
+    @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     @Bean
     @ConditionalOnMissingBean(JpaHelper::class)
-    fun createJpaHelper(entityManager: EntityManager): JpaHelper {
+    fun jpaHelper(entityManager: EntityManager): JpaHelper {
         return JpaHelper(entityManager)
+    }
+
+    @Bean
+    @ConditionalOnMissingClass("org.springframework.security.core.context.SecurityContextHolder")
+    @ConditionalOnMissingBean(AuditorAware::class)
+    fun defaultAuditorAware(): AuditorAware<String> {
+        return DefaultAuditorAware()
+    }
+
+    @Bean
+    @ConditionalOnClass(SecurityContextHolder::class)
+    @ConditionalOnMissingBean(AuditorAware::class)
+    fun springSecurityAuditorAware(): AuditorAware<String> {
+        return SpringSecurityAuditorAware()
     }
 }
