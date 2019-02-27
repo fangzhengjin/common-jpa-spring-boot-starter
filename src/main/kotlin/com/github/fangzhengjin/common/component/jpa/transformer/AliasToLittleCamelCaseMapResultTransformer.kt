@@ -15,11 +15,11 @@ import java.util.*
  * @author fangzhengjin
  * cate 2018-8-22 14:31
  */
-class AliasToEntityCaseFormatMapResultTransformer private constructor() : AliasedTupleSubsetResultTransformer() {
+class AliasToLittleCamelCaseMapResultTransformer private constructor() : AliasedTupleSubsetResultTransformer() {
 
     companion object {
         @JvmStatic
-        val INSTANCE = AliasToEntityCaseFormatMapResultTransformer()
+        val INSTANCE = AliasToLittleCamelCaseMapResultTransformer()
         @JvmStatic
         val dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")!!
 
