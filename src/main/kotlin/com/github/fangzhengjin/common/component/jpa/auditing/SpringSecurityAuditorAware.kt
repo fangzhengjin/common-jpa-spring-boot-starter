@@ -4,7 +4,7 @@ import org.springframework.data.domain.AuditorAware
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.*
 
 /**
@@ -18,16 +18,16 @@ import java.util.*
 class SpringSecurityAuditorAware : AuditorAware<String> {
     override fun getCurrentAuditor(): Optional<String> {
         val principal = Optional.ofNullable(SecurityContextHolder.getContext())
-                .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
-                .map(Authentication::getPrincipal)
-                .map {
-                    when (it) {
-                        is String -> it.toString()
-                        is User -> it.username
-                        else -> "system"
-                    }
+            .map(SecurityContext::getAuthentication)
+            .filter(Authentication::isAuthenticated)
+            .map(Authentication::getPrincipal)
+            .map {
+                when (it) {
+                    is String -> it.toString()
+                    is UserDetails -> it.username
+                    else -> "system"
                 }
+            }
         return if (principal.isPresent) {
             principal
         } else {
