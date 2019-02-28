@@ -30,7 +30,7 @@ class JpaHelperAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(JpaHelper::class)
     fun jpaHelper(entityManager: EntityManager): JpaHelper {
-        return JpaHelper(entityManager)
+        return JpaHelper.init(entityManager)
     }
 
     @Bean
