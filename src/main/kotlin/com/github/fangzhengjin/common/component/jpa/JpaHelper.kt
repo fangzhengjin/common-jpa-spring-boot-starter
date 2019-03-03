@@ -109,6 +109,7 @@ object JpaHelper {
     ): MutableList<T> {
         val query = entityManager.createNativeQuery(querySql)
         query.unwrap(NativeQueryImpl::class.java).setResultTransformer(Transformers.aliasToBean(target))
+        @Suppress("UNCHECKED_CAST")
         return query.resultList as MutableList<T>
     }
 
