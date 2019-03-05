@@ -101,6 +101,7 @@ object JpaHelper {
     /**
      * 本地查询 每行结果封装至指定对象
      */
+    @Suppress("UNCHECKED_CAST")
     @JvmStatic
     fun <T : Any> nativeQueryTransformerCustomizeEntityResultToList(
         @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
