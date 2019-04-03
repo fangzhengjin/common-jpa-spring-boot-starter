@@ -18,7 +18,7 @@ class JQGrid<T>(
         val page: Int
 )
 
-fun <T> Result.Companion.jqGrid(page: Page<T>): JQGrid<T> {
+fun <T> HttpResult.Companion.jqGrid(page: Page<T>): JQGrid<T> {
     return JQGrid(
             rows = page.content,
             records = page.totalElements,
@@ -27,7 +27,7 @@ fun <T> Result.Companion.jqGrid(page: Page<T>): JQGrid<T> {
     )
 }
 
-fun <T> Result.Companion.jqGrid(page: Page<T>, clazz: Class<T>, fields: List<String>): String {
+fun <T> HttpResult.Companion.jqGrid(page: Page<T>, clazz: Class<T>, fields: List<String>): String {
     return JSON.toJSONString(
             JQGrid(
                     rows = page.content,
