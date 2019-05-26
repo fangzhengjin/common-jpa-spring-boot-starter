@@ -1,5 +1,6 @@
 package com.github.fangzhengjin.common.component.jpa.auditing
 
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.AuditorAware
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContext
@@ -16,22 +17,27 @@ import java.util.*
  * @date 2019-2-24 18:39
  */
 class SpringSecurityAuditorAware : AuditorAware<String> {
+    private val logger = LoggerFactory.getLogger(this.javaClass)
     override fun getCurrentAuditor(): Optional<String> {
-        val principal = Optional.ofNullable(SecurityContextHolder.getContext())
-            .map(SecurityContext::getAuthentication)
-            .filter(Authentication::isAuthenticated)
-            .map(Authentication::getPrincipal)
-            .map {
-                when (it) {
-                    is String -> it.toString()
-                    is UserDetails -> it.username
-                    else -> "system"
-                }
+        try {
+            val principal = Optional.ofNullable(SecurityContextHolder.getContext())
+                    .map(SecurityContext::getAuthentication)
+                    .filter(Authentication::isAuthenticated)
+                    .map(Authentication::getPrincipal)
+                    .map {
+                        when (it) {
+                            is String -> it.toString()
+                            is UserDetails -> it.username
+                            else -> "system"
+                        }
+                    }
+            return if (principal.isPresent) {
+                principal
+            } else {
+                Optional.of("system")
             }
-        return if (principal.isPresent) {
-            principal
-        } else {
-            Optional.of("system")
+        } catch (ignore: Exception) {
+            return Optional.of("unknow")
         }
     }
 }
