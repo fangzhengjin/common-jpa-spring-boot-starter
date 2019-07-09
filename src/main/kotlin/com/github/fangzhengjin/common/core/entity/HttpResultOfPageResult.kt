@@ -19,7 +19,7 @@ class PageResult<T>(
 
 
 @JvmOverloads
-fun <T> Result.Companion.page(page: Page<T>, message: String? = null): HttpResult<PageResult<T>> {
+fun <T> HttpResult.Companion.page(page: Page<T>, message: String? = null): HttpResult<PageResult<T>> {
     return HttpResult(
             code = HttpStatus.OK.value(),
             message = message ?: HttpStatus.OK.reasonPhrase,
