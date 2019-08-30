@@ -26,15 +26,15 @@ class AliasToLittleCamelCaseMapResultTransformer private constructor() : Aliased
     }
 
     override fun transformTuple(tuple: Array<out Any>?, aliases: Array<out String>?): Any {
-        val result = HashMap<Any, Any>(tuple!!.size)
+        val result = HashMap<Any, Any?>(tuple!!.size)
         for (i in tuple.indices) {
             val alias = aliases?.get(i)
             if (alias != null) {
                 val key = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, alias)
-                result[key] = tuple[i].let {
-                    when (it) {
-                        is Date -> dtf.format(LocalDateTime.ofInstant(it.toInstant(), ZoneId.systemDefault()))
-                        else -> it
+                result[key] = tuple[i]?.run {
+                    when (this) {
+                        is Date -> dtf.format(LocalDateTime.ofInstant(this.toInstant(), ZoneId.systemDefault()))
+                        else -> this
                     }
                 }
             }
