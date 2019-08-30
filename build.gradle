@@ -27,8 +27,9 @@ repositories {
 }
 
 dependencies {
-    api "com.github.fangzhengjin:common-core:0.0.5"
+    api "com.github.fangzhengjin:common-core:0.0.+"
     api "org.springframework.boot:spring-boot-starter-data-jpa"
+    api "com.google.guava:guava:28.0-jre"
     compileOnly "org.springframework.boot:spring-boot-starter-security"
     //fastjson
 //    implementation "com.alibaba:fastjson:${fastJsonVersion}"
