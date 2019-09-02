@@ -38,6 +38,7 @@ object JpaHelper {
     /**
      *  本地查询 使用页码分页 每行结果封装至Map 结果集key处理为小驼峰
      */
+    @JvmOverloads
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResultToPage(
         @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
@@ -53,6 +54,7 @@ object JpaHelper {
     /**
      * 本地查询 使用Pageable分页 每行结果封装至Map 结果集key处理为小驼峰
      */
+    @JvmOverloads
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResultToPage(
         @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
@@ -66,7 +68,6 @@ object JpaHelper {
         query.maxResults = pageable.pageSize
         query.unwrap(NativeQueryImpl::class.java)
             .setResultTransformer(AliasToLittleCamelCaseMapResultTransformer.INSTANCE)
-
         val countQuery = nativeQueryNoTransformerSingleObjectResult(countSql ?: "SELECT count(0) from ($querySql) as page")
         return PageImpl<Any>(query.resultList, pageable, countQuery.toString().toLong())
     }
