@@ -43,7 +43,7 @@ object JpaHelper {
         @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String,
         @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
-        countSql: String,
+        countSql: String? = null,
         page: Int,
         size: Int
     ): Page<Any> {
@@ -58,7 +58,7 @@ object JpaHelper {
         @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String,
         @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
-        countSql: String,
+        countSql: String? = null,
         pageable: Pageable
     ): Page<Any> {
         val query = entityManager.createNativeQuery(querySql)
@@ -67,7 +67,7 @@ object JpaHelper {
         query.unwrap(NativeQueryImpl::class.java)
             .setResultTransformer(AliasToLittleCamelCaseMapResultTransformer.INSTANCE)
 
-        val countQuery = nativeQueryNoTransformerSingleObjectResult(countSql)
+        val countQuery = nativeQueryNoTransformerSingleObjectResult(countSql ?: "SELECT count(0) from ($querySql) as page")
         return PageImpl<Any>(query.resultList, pageable, countQuery.toString().toLong())
     }
 
