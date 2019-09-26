@@ -1,5 +1,7 @@
 package com.github.fangzhengjin.common.core.entity
 
+import com.alibaba.fastjson.JSON
+import com.alibaba.fastjson.serializer.SimplePropertyPreFilter
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import org.springframework.data.domain.Page
@@ -30,4 +32,12 @@ fun <T> HttpResult.Companion.page(page: Page<T>, message: String? = null): HttpR
                     currentPage = page.number + 1
             )
     )
+}
+
+@JvmOverloads
+fun <T> HttpResult.Companion.page(page: Page<T>, clazz: Class<T>, includeFields: Set<String> = setOf(), excludeFields: Set<String> = setOf()): String {
+    val propertyPreFilter = SimplePropertyPreFilter(clazz)
+    propertyPreFilter.includes.addAll(includeFields)
+    propertyPreFilter.excludes.addAll(excludeFields)
+    return JSON.toJSONString(page(page), propertyPreFilter)
 }
