@@ -27,12 +27,10 @@ fun <T> HttpResult.Companion.jqGrid(page: Page<T>): JQGrid<T> {
     )
 }
 
-fun <T> HttpResult.Companion.jqGrid(page: Page<T>, clazz: Class<T>, fields: List<String>): String {
-    return JSON.toJSONString(
-            JQGrid(
-                    rows = page.content,
-                    records = page.totalElements,
-                    total = page.totalPages,
-                    page = page.number + 1
-            ), SimplePropertyPreFilter(clazz, *fields.toTypedArray()))
+@JvmOverloads
+fun <T> HttpResult.Companion.jqGrid(page: Page<T>, clazz: Class<T>, includeFields: Set<String> = setOf(), excludeFields: Set<String> = setOf()): String {
+    val propertyPreFilter = SimplePropertyPreFilter(clazz)
+    propertyPreFilter.includes.addAll(includeFields)
+    propertyPreFilter.excludes.addAll(excludeFields)
+    return JSON.toJSONString(jqGrid(page), propertyPreFilter)
 }
