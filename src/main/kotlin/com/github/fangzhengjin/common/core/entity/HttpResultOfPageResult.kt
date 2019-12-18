@@ -35,9 +35,9 @@ fun <T> HttpResult.Companion.page(page: Page<T>, message: String? = null): HttpR
 }
 
 @JvmOverloads
-fun <T> HttpResult.Companion.page(page: Page<T>, clazz: Class<T>, includeFields: Set<String> = setOf(), excludeFields: Set<String> = setOf()): String {
+fun <T> HttpResult.Companion.page(page: Page<T>, clazz: Class<T>, includeFields: Set<String> = setOf(), excludeFields: Set<String> = setOf(), vararg serializerFeature: SerializerFeature): String {
     val propertyPreFilter = SimplePropertyPreFilter(clazz)
     propertyPreFilter.includes.addAll(includeFields)
     propertyPreFilter.excludes.addAll(excludeFields)
-    return JSON.toJSONString(page(page), propertyPreFilter)
+    return JSON.toJSONString(page(page), propertyPreFilter, *serializerFeature)
 }
