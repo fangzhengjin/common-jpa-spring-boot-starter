@@ -52,13 +52,13 @@ dependencies {
     api("com.github.fangzhengjin:common-core:0.0.6")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     api("com.google.guava:guava:28.0-jre")
-    implementation("org.springframework.boot:spring-boot-starter-security")
+    compileOnly("org.springframework.boot:spring-boot-starter-security")
     //fastjson
 //    implementation "com.alibaba:fastjson:${fastJsonVersion}"
     //Swagger2
-    implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
-    implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
-    implementation("io.springfox:springfox-bean-validators:${swaggerVersion}")
+    compileOnly("io.springfox:springfox-swagger2:${swaggerVersion}")
+    compileOnly("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+    compileOnly("io.springfox:springfox-bean-validators:${swaggerVersion}")
     api(kotlin("reflect"))
     api(kotlin("stdlib-jdk8"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
