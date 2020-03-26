@@ -49,17 +49,15 @@ repositories {
 }
 
 dependencies {
-    api("com.github.fangzhengjin:common-core:0.0.6")
+    api("com.github.fangzhengjin:common-core:0.0.9")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     api("com.google.guava:guava:28.0-jre")
     compileOnly("org.springframework.boot:spring-boot-starter-security")
-    //fastjson
-//    implementation "com.alibaba:fastjson:${fastJsonVersion}"
     //Swagger2
     compileOnly("io.springfox:springfox-swagger2:${swaggerVersion}")
     compileOnly("io.springfox:springfox-swagger-ui:${swaggerVersion}")
     compileOnly("io.springfox:springfox-bean-validators:${swaggerVersion}")
     api(kotlin("reflect"))
     api(kotlin("stdlib-jdk8"))
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testCompileOnly("org.springframework.boot:spring-boot-starter-test")
 }
