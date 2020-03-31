@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.github.fangzhengjin.common.component.jpa
 
 import com.github.fangzhengjin.common.component.jpa.transformer.AliasToLittleCamelCaseMapResultTransformer
@@ -33,16 +31,19 @@ object JpaHelper {
         return PageRequest.of(if (page <= 1) 0 else page - 1, size)
     }
 
+    @JvmStatic
+    fun getEntityManager(): EntityManager = entityManager
+
     /**
      *  本地查询 使用页码分页 每行结果封装至Map 结果集key处理为小驼峰
      */
     @JvmOverloads
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResultToPage(
-        querySql: String,
-        countSql: String? = null,
-        page: Int,
-        size: Int
+            querySql: String,
+            countSql: String? = null,
+            page: Int,
+            size: Int
     ): Page<Any> {
         return nativeQueryTransformLittleCamelCaseMapResultToPage(querySql, countSql, getPageable(page, size))
     }
@@ -53,16 +54,17 @@ object JpaHelper {
     @JvmOverloads
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResultToPage(
-        querySql: String,
-        countSql: String? = null,
-        pageable: Pageable
+            querySql: String,
+            countSql: String? = null,
+            pageable: Pageable
     ): Page<Any> {
         val query = entityManager.createNativeQuery(querySql)
         query.firstResult = pageable.offset.toInt()
         query.maxResults = pageable.pageSize
         query.unwrap(NativeQueryImpl::class.java)
-            .setResultTransformer(AliasToLittleCamelCaseMapResultTransformer.INSTANCE)
-        val countQuery = nativeQueryNoTransformerSingleObjectResult(countSql ?: "SELECT count(0) from ($querySql) as page")
+                .setResultTransformer(AliasToLittleCamelCaseMapResultTransformer.INSTANCE)
+        val countQuery = nativeQueryNoTransformerSingleObjectResult(countSql
+                ?: "SELECT count(0) from ($querySql) as page")
         return PageImpl<Any>(query.resultList, pageable, countQuery.toString().toLong())
     }
 
@@ -71,11 +73,11 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResult(
-        querySql: String
+            querySql: String
     ): MutableList<Any?> {
         val query = entityManager.createNativeQuery(querySql)
         query.unwrap(NativeQueryImpl::class.java)
-            .setResultTransformer(AliasToLittleCamelCaseMapResultTransformer.INSTANCE)
+                .setResultTransformer(AliasToLittleCamelCaseMapResultTransformer.INSTANCE)
         return query.resultList
     }
 
@@ -84,7 +86,7 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryNoTransformerMapResultToList(
-        querySql: String
+            querySql: String
     ): MutableList<Any?> {
         val query = entityManager.createNativeQuery(querySql)
         query.unwrap(NativeQueryImpl::class.java).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
@@ -97,8 +99,8 @@ object JpaHelper {
     @Suppress("UNCHECKED_CAST")
     @JvmStatic
     fun <T : Any> nativeQueryTransformerCustomizeEntityResultToList(
-        querySql: String,
-        target: Class<T>
+            querySql: String,
+            target: Class<T>
     ): MutableList<T> {
         val query = entityManager.createNativeQuery(querySql)
         query.unwrap(NativeQueryImpl::class.java).setResultTransformer(Transformers.aliasToBean(target))
@@ -111,9 +113,9 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryNoTransformerObjectToList(
-        querySql: String
+            querySql: String
     ): MutableList<Any?> =
-        entityManager.createNativeQuery(querySql).resultList
+            entityManager.createNativeQuery(querySql).resultList
 
 
     /**
@@ -121,7 +123,15 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryNoTransformerSingleObjectResult(
-        querySql: String
+            querySql: String
     ): Any? =
-        entityManager.createNativeQuery(querySql).singleResult
+            entityManager.createNativeQuery(querySql).singleResult
+
+    /**
+     * 执行本地SQL
+     */
+    @JvmStatic
+    fun executeNativeQuery(
+            executeSql: String
+    ) = entityManager.createNativeQuery(executeSql).executeUpdate()
 }
