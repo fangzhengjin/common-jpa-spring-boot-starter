@@ -5,7 +5,6 @@ package com.github.fangzhengjin.common.component.jpa
 import com.github.fangzhengjin.common.component.jpa.transformer.AliasToLittleCamelCaseMapResultTransformer
 import org.hibernate.query.internal.NativeQueryImpl
 import org.hibernate.transform.Transformers
-import org.intellij.lang.annotations.Language
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -24,7 +23,6 @@ import javax.persistence.EntityManager
 
 object JpaHelper {
     private lateinit var entityManager: EntityManager
-    const val DEFAULT_JPA_NATIVE_QUERY_LANGUAGE = "Oracle"
     fun init(entityManager: EntityManager): JpaHelper {
         this.entityManager = entityManager
         return this
@@ -41,9 +39,7 @@ object JpaHelper {
     @JvmOverloads
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResultToPage(
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String,
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         countSql: String? = null,
         page: Int,
         size: Int
@@ -57,9 +53,7 @@ object JpaHelper {
     @JvmOverloads
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResultToPage(
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String,
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         countSql: String? = null,
         pageable: Pageable
     ): Page<Any> {
@@ -77,7 +71,6 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryTransformLittleCamelCaseMapResult(
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String
     ): MutableList<Any?> {
         val query = entityManager.createNativeQuery(querySql)
@@ -91,7 +84,6 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryNoTransformerMapResultToList(
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String
     ): MutableList<Any?> {
         val query = entityManager.createNativeQuery(querySql)
@@ -105,7 +97,6 @@ object JpaHelper {
     @Suppress("UNCHECKED_CAST")
     @JvmStatic
     fun <T : Any> nativeQueryTransformerCustomizeEntityResultToList(
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String,
         target: Class<T>
     ): MutableList<T> {
@@ -120,7 +111,6 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryNoTransformerObjectToList(
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String
     ): MutableList<Any?> =
         entityManager.createNativeQuery(querySql).resultList
@@ -131,7 +121,6 @@ object JpaHelper {
      */
     @JvmStatic
     fun nativeQueryNoTransformerSingleObjectResult(
-        @Language(DEFAULT_JPA_NATIVE_QUERY_LANGUAGE)
         querySql: String
     ): Any? =
         entityManager.createNativeQuery(querySql).singleResult
